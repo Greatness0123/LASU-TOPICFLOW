@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Project topic allocation portal" />
+  <title>TopicFlow | Project Allocation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-mark">T</span><span>Topic<span>Flow</span></span></a>
+      <p class="eyebrow">ACADEMIC PORTAL</p>
+      <nav>
+        <a class="nav-link active" href="#dashboard" data-view="dashboard"><i>▦</i> Overview</a>
+        <a class="nav-link" href="#topics" data-view="topics"><i>◈</i> Topic catalogue</a>
+        <a class="nav-link" href="#requests" data-view="requests"><i>↗</i> Requests <b id="pending-badge">3</b></a>
+        <a class="nav-link" href="#allocations" data-view="allocations"><i>⌘</i> Allocations</a>
+        <a class="nav-link" href="#reports" data-view="reports"><i>▤</i> Reports</a>
+      </nav>
+      <div class="sidebar-bottom"><div class="help-card"><span>✦</span><strong>Need assistance?</strong><small>Read the allocation guide</small></div><button class="profile" id="profile-button" type="button"><span class="avatar" id="profile-avatar">T</span><span><strong id="profile-name">Guest User</strong><small id="profile-role">Visitor</small></span><i>⌄</i></button><div class="profile-menu hidden" id="profile-menu"><p><strong id="profile-menu-name">Guest User</strong><small id="profile-menu-email">Not signed in</small></p><button class="outline-button" id="logout-button" type="button">Logout</button></div></div>
+    </aside>
+
+    <main>
+      <header class="topbar"><button class="menu-toggle" aria-label="Toggle menu">☰</button><div class="crumb">Administration <span>/</span> <strong id="page-title">Overview</strong></div><div class="top-actions"><button class="icon-button" aria-label="Notifications">♧<em></em></button><button class="new-topic" id="open-topic-modal">+ New topic</button></div></header>
+
+      <section class="view active" id="dashboard">
+        <div class="page-intro"><div><p class="section-label">SEMESTER 1 · 2026/2027</p><h1>Good morning, <em id="dashboard-greeting-name">Admin.</em></h1><p>Here is what is happening across project allocations today.</p></div><div class="date-card"><span id="date-day">28</span><div><strong id="date-month-year">July, 2026</strong><small id="date-weekday">Tuesday</small></div></div></div>
+        <div class="stats-grid"><article><div class="stat-icon green">♙</div><div><p>Total students</p><strong id="stat-total">248</strong><span class="up">↑ 12 this term</span></div></article><article><div class="stat-icon orange">◈</div><div><p>Available topics</p><strong id="stat-available">36</strong><span>Across 8 categories</span></div></article><article><div class="stat-icon blue">⌛</div><div><p>Awaiting review</p><strong id="stat-pending">18</strong><span class="amber">Requires attention</span></div></article><article><div class="stat-icon purple">✓</div><div><p>Allocated</p><strong id="stat-allocated">194</strong><span class="up">78% completion rate</span></div></article></div>
+        <section class="panel role-dashboard-panel" id="role-dashboard-panel"></section>
+        <div class="dashboard-grid"><section class="panel allocation-panel"><div class="panel-head"><div><h2>Allocation progress</h2><p>Current semester overview</p></div><button class="text-button" data-go="allocations">View allocations →</button></div><div class="progress-wrap"><div class="progress-meta"><strong>194 of 248 students allocated</strong><span>78%</span></div><div class="progress"><i></i></div><div class="legend"><span><i class="dot green-dot"></i>Allocated <b>194</b></span><span><i class="dot orange-dot"></i>Pending <b>36</b></span><span><i class="dot gray-dot"></i>Not submitted <b>18</b></span></div></div><div class="mini-stats"><div><strong>42</strong><span>Supervisors</span></div><div><strong>4.6</strong><span>Avg. load</span></div><div><strong>8</strong><span>Departments</span></div></div></section>
+          <section class="panel review-panel"><div class="panel-head"><div><h2>Needs review</h2><p>New activity requiring action</p></div><button class="text-button" data-go="requests">See all →</button></div><div class="review-list"><div><span class="review-icon">↗</span><p><strong>3 new topic requests</strong><small>Submitted in the last 24 hours</small></p><button data-go="requests">Review</button></div><div><span class="review-icon duplicate">⧉</span><p><strong>2 possible duplicates</strong><small>Topics need validation</small></p><button data-go="topics">Check</button></div><div><span class="review-icon load">⚖</span><p><strong>1 supervisor at capacity</strong><small>Consider reassignment</small></p><button data-go="allocations">View</button></div></div></section></div>
+        <section class="panel activity"><div class="panel-head"><div><h2>Recent activity</h2><p>Latest updates from students and supervisors</p></div><button class="text-button">View all →</button></div><table><thead><tr><th>STUDENT</th><th>TOPIC</th><th>SUPERVISOR</th><th>STATUS</th><th>UPDATED</th></tr></thead><tbody id="activity-body"></tbody></table></section>
+      </section>
+
+      <section class="view" id="topics"><div class="page-intro compact"><div><p class="section-label">TOPIC MANAGEMENT</p><h1>Topic catalogue</h1><p>Maintain approved topics and detect overlapping submissions.</p></div><button class="new-topic" id="open-topic-modal-2">+ Add topic</button></div><div class="toolbar"><label class="search">⌕ <input id="topic-search" placeholder="Search topics, fields or supervisors" /></label><select id="topic-filter"><option value="all">All categories</option><option>Artificial Intelligence</option><option>Web Development</option><option>Data Science</option><option>Cybersecurity</option></select><span class="topic-count-pill">Showing <strong id="topic-count">0</strong> topics</span><button class="outline-button" id="check-duplicates">⧉ Check duplicates</button></div><div class="topic-grid" id="topic-grid"></div></section>
+
+      <section class="view" id="requests"><div class="page-intro compact"><div><p class="section-label">STUDENT SUBMISSIONS</p><h1>Topic requests</h1><p>Review and decide on new project-topic submissions.</p></div></div><section class="panel request-table"><div class="proposal-form" id="proposal-form-panel"><form id="proposal-form"><label>Student name<input id="proposal-student" placeholder="Enter your full name" required></label><label>Proposed topic<input id="proposal-title" required></label><label>Research area<select id="proposal-area"><option>Artificial Intelligence</option><option>Web Development</option><option>Data Science</option><option>Cybersecurity</option></select></label><div class="proposal-actions"><button class="outline-button" type="submit" data-mode="draft">Save draft</button><button class="new-topic" type="submit" data-mode="submit">Submit proposal</button></div></form></div><table><thead><tr><th>STUDENT</th><th>PROPOSED TOPIC</th><th>AREA</th><th>SUBMITTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="requests-body"></tbody></table></section></section>
+
+      <section class="view" id="allocations"><div class="page-intro compact"><div><p class="section-label">WORKLOAD MANAGEMENT</p><h1>Supervisor allocations</h1><p>Monitor capacity and keep supervision loads balanced.</p></div></div><div class="supervisor-grid" id="supervisor-grid"></div><section class="panel allocation-panel selected-supervisor-panel hidden" id="selected-supervisor-panel"><div class="panel-head"><div><h2 id="selected-supervisor-name">Supervisor details</h2><p id="selected-supervisor-area">Click a supervisor to view their assigned projects.</p></div><button class="outline-button remove-supervisor-btn hidden" type="button" id="remove-supervisor-btn">Remove supervisor</button></div><div class="supervisor-projects" id="supervisor-projects"></div></section></section>
+
+      <section class="view" id="reports"><div class="page-intro compact"><div><p class="section-label">REPORTING</p><h1>Allocation reports</h1><p>Review allocation progress directly inside TopicFlow.</p></div><button class="new-topic" id="export-report">Show summary</button></div><div class="report-cards"><article><span>▤</span><h2>Allocation summary</h2><p>Student and supervisor allocation status by department.</p><button class="text-button" data-report="summary">Open summary →</button></article><article><span>◈</span><h2>Topic availability</h2><p>Approved, allocated, and open topics by research area.</p><button class="text-button" data-report="availability">View availability →</button></article><article><span>⚖</span><h2>Supervisor workload</h2><p>Current student load against each supervisor’s capacity.</p><button class="text-button" data-report="workload">View workload →</button></article></div><section class="panel report-panel" id="report-summary-panel"><div class="panel-head"><div><h2 id="report-panel-title">Allocation summary</h2><p id="report-panel-copy">Live overview of project allocations.</p></div></div><div class="report-tabs"><button class="report-tab active" data-report-view="summary" type="button">Summary</button><button class="report-tab" data-report-view="availability" type="button">Availability</button><button class="report-tab" data-report-view="workload" type="button">Workload</button></div><div class="report-metrics"><article class="metric-card"><span>Total students</span><strong id="summary-total">0</strong></article><article class="metric-card"><span>Allocated</span><strong id="summary-allocated">0</strong></article><article class="metric-card"><span>Available</span><strong id="summary-available">0</strong></article><article class="metric-card"><span>Pending</span><strong id="summary-pending">0</strong></article></div><div id="report-list"></div></section></section>
+    </main>
+  </div>
+  <div class="modal-backdrop" id="modal"><form class="modal" id="topic-form"><button type="button" class="close-modal" aria-label="Close">×</button><p class="section-label">TOPIC MANAGEMENT</p><h2>Add a project topic</h2><p>Topics are checked for similarity before publication.</p><label>Topic title<input required id="new-title" placeholder="e.g. Smart attendance system" /></label><label>Research area<select id="new-area"><option>Artificial Intelligence</option><option>Web Development</option><option>Data Science</option><option>Cybersecurity</option></select></label><label>Supervisor<select id="new-supervisor"><option>Dr. Adaeze Okafor</option><option>Prof. Ibrahim Musa</option><option>Dr. Chinedu Eze</option></select></label><button class="new-topic" type="submit">Add topic</button></form></div>
+  <div class="toast" id="toast"></div>
+  <div class="login-wall hidden" id="login-wall">
+    <div class="login-card">
+      <span class="brand-mark">T</span>
+      <p class="section-label">TOPICFLOW PORTAL</p>
+      <h2>Access the portal</h2>
+      <p class="auth-copy">Use the demo account or create a fresh account to get started.</p>
+      <div class="auth-switch">
+        <button class="text-button auth-tab active" id="show-login" type="button">Sign in</button>
+        <button class="text-button auth-tab" id="show-signup" type="button">Create account</button>
+      </div>
+      <div id="saved-accounts" class="saved-accounts hidden"></div>
+      <form id="login-form">
+        <label>Email<input id="login-email" type="email" required></label>
+        <label>Password<input id="login-password" type="password" required></label>
+        <button class="new-topic" type="submit">Sign in</button>
+      </form>
+      <form id="signup-form" class="hidden">
+        <label>Full name<input id="signup-name" required></label>
+        <label>Email<input id="signup-email" type="email" required></label>
+        <label>Password<input id="signup-password" type="password" minlength="6" required></label>
+        <label>Role<select id="signup-role"><option value="student">Student</option><option value="supervisor">Supervisor</option><option value="admin">Admin</option></select></label>
+        <button class="new-topic" type="submit">Create account</button>
+      </form>
+      <small id="login-error"></small>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
