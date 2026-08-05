@@ -8,26 +8,160 @@ let topicScores = [];
 let currentReportView = 'summary';
 let staticMode = false;
 const isStaticFile = window.location.protocol === 'file:';
-const demoAdminUser = {id: 1, name: 'Demo Admin', email: 'admin@topicflow.test', password: 'admin123', role: 'admin', area: '', capacity: 6};
-const demoStudentUser = {id: 2, name: 'Demo Student', email: 'student@topicflow.test', password: 'student123', role: 'student', area: '', capacity: 0};
-const demoSupervisorUser = {id: 3, name: 'Demo Supervisor', email: 'supervisor@topicflow.test', password: 'supervisor123', role: 'supervisor', area: 'Data Science', capacity: 6};
-const demoUsers = [demoAdminUser, demoStudentUser, demoSupervisorUser];
+
+const defaultDemoUsers = [
+  { id: 1, name: 'Pius Tana', email: 'piusutana121@gmail.com', password: 'Pius-1234', role: 'admin', capacity: 0, area: '' },
+  { id: 2, name: 'Dr. Adaeze Okafor', email: 'adaeze@topicflow.test', password: 'Pius-1234', role: 'supervisor', capacity: 6, area: 'Artificial Intelligence' },
+  { id: 3, name: 'Prof. Ibrahim Musa', email: 'ibrahim@topicflow.test', password: 'Pius-1234', role: 'supervisor', capacity: 6, area: 'Data Science' },
+  { id: 4, name: 'Dr. Chinedu Eze', email: 'chinedu@topicflow.test', password: 'Pius-1234', role: 'supervisor', capacity: 6, area: 'Web Development' },
+  { id: 5, name: 'Dr. Nneka Obi', email: 'nneka@topicflow.test', password: 'Pius-1234', role: 'supervisor', capacity: 6, area: 'Cybersecurity' },
+  { id: 6, name: 'Chiamaka Bello', email: 'chiamaka@topicflow.test', password: 'Pius-1234', role: 'student', capacity: 0, area: '' },
+  { id: 7, name: 'Ifeanyi Okoro', email: 'ifeanyi@topicflow.test', password: 'Pius-1234', role: 'student', capacity: 0, area: '' },
+  { id: 8, name: 'Tunde Bakare', email: 'tunde@topicflow.test', password: 'Pius-1234', role: 'student', capacity: 0, area: '' }
+];
+
+const defaultDemoTopics = [
+  { id: 1, title: 'AI-powered student performance prediction', area: 'Artificial Intelligence', supervisor_id: 2, status: 'available', created_at: '2026-07-28' },
+  { id: 2, title: 'Secure e-voting system for student elections', area: 'Cybersecurity', supervisor_id: 5, status: 'available', created_at: '2026-07-27' },
+  { id: 3, title: 'Online project topic allocation platform', area: 'Web Development', supervisor_id: 4, status: 'allocated', created_at: '2026-07-26' },
+  { id: 4, title: 'Crop disease detection using image recognition', area: 'Artificial Intelligence', supervisor_id: 2, status: 'available', created_at: '2026-07-25' },
+  { id: 5, title: 'Intelligent campus navigation with indoor mapping', area: 'Artificial Intelligence', supervisor_id: 2, status: 'review', created_at: '2026-07-24' },
+  { id: 6, title: 'Data-driven library recommendation engine', area: 'Data Science', supervisor_id: 3, status: 'available', created_at: '2026-07-23' },
+  { id: 7, title: 'Remote lab equipment scheduling dashboard', area: 'Web Development', supervisor_id: 4, status: 'review', created_at: '2026-07-22' },
+  { id: 8, title: 'Privacy-first student credential wallet', area: 'Cybersecurity', supervisor_id: 5, status: 'allocated', created_at: '2026-07-21' },
+  { id: 9, title: 'Adaptive exam scheduling and load balancing', area: 'Data Science', supervisor_id: 3, status: 'available', created_at: '2026-07-20' },
+  { id: 10, title: 'Sensor-based campus energy monitoring system', area: 'Artificial Intelligence', supervisor_id: 2, status: 'available', created_at: '2026-07-19' },
+  { id: 11, title: 'Collaborative research project tracker', area: 'Web Development', supervisor_id: 4, status: 'allocated', created_at: '2026-07-18' },
+  { id: 12, title: 'Behavioral analytics for attendance trends', area: 'Cybersecurity', supervisor_id: 5, status: 'review', created_at: '2026-07-17' }
+];
+
+const defaultDemoRequests = [
+  { id: 1, student_id: 6, student: 'Chiamaka Bello', title: 'Blockchain-based certificate verification', area: 'Cybersecurity', status: 'pending', created_at: '2026-07-29' },
+  { id: 2, student_id: 7, student: 'Ifeanyi Okoro', title: 'Machine learning field study planner', area: 'Data Science', status: 'draft', created_at: '2026-07-28' }
+];
+
+const defaultDemoAllocations = [
+  { id: 1, student_id: 6, topic_id: 3, supervisor_id: 4, allocated_at: '2026-07-30 10:00:00' },
+  { id: 2, student_id: 7, topic_id: 8, supervisor_id: 5, allocated_at: '2026-07-29 11:20:00' },
+  { id: 3, student_id: 7, topic_id: 11, supervisor_id: 4, allocated_at: '2026-07-28 14:15:00' }
+];
+
+const defaultDemoTopicScores = [
+  { topic_id: 3, score: 4, note: 'Strong proposal and clear scope.', updated_at: '2026-07-30T10:10:00.000Z' },
+  { topic_id: 8, score: 5, note: 'Excellent alignment with security practice.', updated_at: '2026-07-29T11:40:00.000Z' }
+];
+
+const defaultSavedLogins = [
+  { id: 1, name: 'Pius Tana', email: 'piusutana121@gmail.com', password: 'Pius-1234', role: 'admin' },
+  { id: 2, name: 'Dr. Adaeze Okafor', email: 'adaeze@topicflow.test', password: 'Pius-1234', role: 'supervisor' },
+  { id: 6, name: 'Chiamaka Bello', email: 'chiamaka@topicflow.test', password: 'Pius-1234', role: 'student' }
+];
+
 const SAVED_LOGIN_STORAGE_KEY = 'topicflow-saved-logins';
-const demoSupervisors = [
-  {id: 2, name: 'Prof. Aribisala', area: 'Artificial Intelligence', capacity: 6, avatarLabel: 'Prof. A.'},
-  {id: 3, name: 'Prof. Rahman', area: 'Data Science', capacity: 6, avatarLabel: 'Prof. R.'},
-  {id: 4, name: 'Dr. Adam', area: 'Web Development', capacity: 6, avatarLabel: 'Dr. A.'}
-];
-const demoTopics = [
-  {id: 1, title: 'AI-powered student performance prediction', area: 'Artificial Intelligence', supervisor_id: 2, supervisor: 'Prof. Aribisala', status: 'available', created_at: '2026-07-28'},
-  {id: 2, title: 'Secure e-voting system for student elections', area: 'Cybersecurity', supervisor_id: 3, supervisor: 'Prof. Rahman', status: 'available', created_at: '2026-07-27'},
-  {id: 3, title: 'Online project topic allocation platform', area: 'Web Development', supervisor_id: 4, supervisor: 'Dr. Adam', status: 'allocated', created_at: '2026-07-26'},
-  {id: 4, title: 'Crop disease detection using image recognition', area: 'Artificial Intelligence', supervisor_id: 2, supervisor: 'Prof. Aribisala', status: 'available', created_at: '2026-07-25'}
-];
-const demoRequests = [
-  {id: 1, student: 'Chiamaka Bello', student_id: 5, title: 'Blockchain-based certificate verification', area: 'Cybersecurity', status: 'pending', created_at: '2026-07-29'}
-];
-const demoDashboardStats = {total: 248, allocated: 194, available: 4, pending: 1};
+
+function getStoredUsers() {
+  return JSON.parse(localStorage.getItem('topicflow-users') || '[]');
+}
+function saveStoredUsers(users) {
+  localStorage.setItem('topicflow-users', JSON.stringify(users));
+}
+function getStoredTopics() {
+  return JSON.parse(localStorage.getItem('topicflow-topics') || '[]');
+}
+function saveStoredTopics(topics) {
+  localStorage.setItem('topicflow-topics', JSON.stringify(topics));
+}
+function getStoredRequests() {
+  return JSON.parse(localStorage.getItem('topicflow-requests') || '[]');
+}
+function saveStoredRequests(requests) {
+  localStorage.setItem('topicflow-requests', JSON.stringify(requests));
+}
+function getStoredAllocations() {
+  return JSON.parse(localStorage.getItem('topicflow-allocations') || '[]');
+}
+function saveStoredAllocations(allocations) {
+  localStorage.setItem('topicflow-allocations', JSON.stringify(allocations));
+}
+function getStoredScores() {
+  return JSON.parse(localStorage.getItem('topicflow-scores') || '[]');
+}
+function saveStoredScores(scores) {
+  localStorage.setItem('topicflow-scores', JSON.stringify(scores));
+}
+
+function initLocalStorageDb() {
+  if (!localStorage.getItem('topicflow-users')) {
+    localStorage.setItem('topicflow-users', JSON.stringify(defaultDemoUsers));
+  }
+  if (!localStorage.getItem('topicflow-topics')) {
+    localStorage.setItem('topicflow-topics', JSON.stringify(defaultDemoTopics));
+  }
+  if (!localStorage.getItem('topicflow-requests')) {
+    localStorage.setItem('topicflow-requests', JSON.stringify(defaultDemoRequests));
+  }
+  if (!localStorage.getItem('topicflow-allocations')) {
+    localStorage.setItem('topicflow-allocations', JSON.stringify(defaultDemoAllocations));
+  }
+  if (!localStorage.getItem('topicflow-scores')) {
+    localStorage.setItem('topicflow-scores', JSON.stringify(defaultDemoTopicScores));
+  }
+  if (!localStorage.getItem(SAVED_LOGIN_STORAGE_KEY)) {
+    localStorage.setItem(SAVED_LOGIN_STORAGE_KEY, JSON.stringify(defaultSavedLogins));
+  }
+}
+
+function syncFromLocalStorage() {
+  initLocalStorageDb();
+
+  const storedUsers = getStoredUsers();
+  const storedTopics = getStoredTopics();
+  const storedRequests = getStoredRequests();
+  const storedAllocations = getStoredAllocations();
+  const storedScores = getStoredScores();
+  const storedSession = localStorage.getItem('topicflow-current-user');
+
+  supervisors = storedUsers
+    .filter(u => u.role === 'supervisor')
+    .map(s => ({
+      id: s.id,
+      name: s.name,
+      area: s.area || 'General',
+      capacity: s.capacity ?? 6,
+      avatarLabel: s.name.split(' ').slice(-1)[0].toUpperCase()
+    }));
+
+  topics = storedTopics.map(t => {
+    const supervisorObj = storedUsers.find(u => u.id === Number(t.supervisor_id));
+    return {
+      ...t,
+      supervisor: supervisorObj ? supervisorObj.name : 'Unassigned'
+    };
+  });
+
+  requests = storedRequests;
+  topicScores = storedScores;
+
+  if (storedSession) {
+    currentUser = JSON.parse(storedSession);
+    csrfToken = 'demo';
+  } else {
+    currentUser = null;
+    csrfToken = null;
+  }
+
+  const totalStudents = storedUsers.filter(u => u.role === 'student').length;
+  const allocatedCount = storedAllocations.length;
+  const availableCount = topics.filter(t => t.status === 'available').length;
+  const pendingCount = requests.filter(r => r.status === 'pending').length;
+
+  dashboardStats = {
+    total: totalStudents,
+    allocated: allocatedCount,
+    available: availableCount,
+    pending: pendingCount
+  };
+}
 
 function readStoredScores() {
   try {
@@ -122,19 +256,19 @@ function getNoteForTopic(topicId) {
 
 function enableStaticDemoMode() {
   staticMode = true;
-  currentUser = null;
-  csrfToken = 'demo';
-  supervisors = demoSupervisors.map(s => ({...s}));
-  topics = demoTopics.map(t => ({...t}));
-  requests = demoRequests.map(r => ({...r}));
-  dashboardStats = {...demoDashboardStats};
-  readStoredScores();
-  document.querySelector('#login-wall')?.classList.remove('hidden');
+  syncFromLocalStorage();
+
+  const loginWall = document.querySelector('#login-wall');
+  if (!currentUser) {
+    loginWall?.classList.remove('hidden');
+  } else {
+    loginWall?.classList.add('hidden');
+  }
+
   updateAuthUi();
   populateSupervisors();
   renderSavedAccounts();
   render();
-  toast('Static demo mode enabled. Log in or create a new account.');
 }
 
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char])); }
@@ -144,117 +278,252 @@ function avatarDataUri(name) { const initials = avatarInitials(name) || '?'; con
 function simulateApi(action, options = {}) {
   const method = (options.method || 'GET').toUpperCase();
   const body = options.body ? JSON.parse(options.body) : {};
-  if (action === 'me') return Promise.resolve({user: currentUser, csrf: csrfToken});
+
+  // First, ensure local storage database is initialized and local state is synced
+  syncFromLocalStorage();
+
+  const storedUsers = getStoredUsers();
+  const storedTopics = getStoredTopics();
+  const storedRequests = getStoredRequests();
+  const storedAllocations = getStoredAllocations();
+  const storedScores = getStoredScores();
+
+  if (action === 'me') {
+    return Promise.resolve({ user: currentUser, csrf: csrfToken });
+  }
+
   if (action === 'login' && method === 'POST') {
-    const user = demoUsers.find(u => u.email === String(body.email || '').toLowerCase());
-    if (!user || body.password !== user.password) {
+    const email = String(body.email || '').trim().toLowerCase();
+    const password = String(body.password || '').trim();
+    const user = storedUsers.find(u => String(u.email || '').toLowerCase() === email);
+    if (!user || password !== user.password) {
       return Promise.reject(new Error('Invalid email or password'));
     }
-    currentUser = {...user};
+    currentUser = { ...user };
+    delete currentUser.password; // sanitize
     csrfToken = 'demo';
-    return Promise.resolve({user: currentUser, csrf: csrfToken});
+    localStorage.setItem('topicflow-current-user', JSON.stringify(currentUser));
+    syncFromLocalStorage();
+    return Promise.resolve({ user: currentUser, csrf: csrfToken });
   }
+
   if (action === 'logout' && method === 'POST') {
     currentUser = null;
-    csrfToken = 'demo';
-    return Promise.resolve({ok: true});
+    csrfToken = null;
+    localStorage.removeItem('topicflow-current-user');
+    syncFromLocalStorage();
+    return Promise.resolve({ ok: true });
   }
+
   if (action === 'register' && method === 'POST') {
-    const email = String(body.email || '').toLowerCase();
-    if (!body.name || !body.email || !body.password) {
+    const name = String(body.name || '').trim();
+    const email = String(body.email || '').trim().toLowerCase();
+    const password = String(body.password || '').trim();
+    if (!name || !email || !password) {
       return Promise.reject(new Error('All fields are required'));
     }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       return Promise.reject(new Error('Enter a valid email address'));
     }
-    if (demoUsers.some(u => u.email === email)) {
+    if (storedUsers.some(u => String(u.email || '').toLowerCase() === email)) {
       return Promise.reject(new Error('Email already registered'));
     }
-    const id = Math.max(0, ...demoUsers.map(u => u.id)) + 1;
+    const id = Math.max(0, ...storedUsers.map(u => u.id)) + 1;
     const newUser = {
       id,
-      name: body.name.trim(),
+      name,
       email,
-      password: body.password,
+      password,
       role: body.role || 'student',
-      area: body.role === 'supervisor' ? 'General' : '',
+      area: body.role === 'supervisor' ? (body.role === 'supervisor' ? 'Artificial Intelligence' : 'General') : '',
       capacity: body.role === 'supervisor' ? 6 : 0
     };
-    demoUsers.push(newUser);
-    if (newUser.role === 'supervisor') {
-      const supervisorProfile = {
-        id: newUser.id + 10,
-        name: newUser.name,
-        area: newUser.area,
-        capacity: newUser.capacity,
-        avatarLabel: newUser.name.split(' ').slice(-1)[0].toUpperCase()
-      };
-      supervisors.push(supervisorProfile);
-      populateSupervisors();
-    }
-    currentUser = {...newUser};
+    storedUsers.push(newUser);
+    saveStoredUsers(storedUsers);
+
+    currentUser = { ...newUser };
+    delete currentUser.password; // sanitize
     csrfToken = 'demo';
-    return Promise.resolve({user: currentUser, csrf: csrfToken});
+    localStorage.setItem('topicflow-current-user', JSON.stringify(currentUser));
+    syncFromLocalStorage();
+    return Promise.resolve({ user: currentUser, csrf: csrfToken });
   }
-  if (action === 'login' || action === 'register') return Promise.reject(new Error('Invalid auth action'));
-  if (action === 'supervisors') return Promise.resolve(supervisors);
-  if (action === 'dashboard') return Promise.resolve(dashboardStats);
-  if (action === 'scores') return Promise.resolve(topicScores);
+
+  if (action === 'supervisors') {
+    return Promise.resolve(supervisors);
+  }
+
+  if (action === 'dashboard') {
+    return Promise.resolve(dashboardStats);
+  }
+
+  if (action === 'scores') {
+    return Promise.resolve(topicScores);
+  }
+
   if (action === 'score-topic' && method === 'POST') {
     const topicId = Number(body.topic_id || 0);
     const score = Number(body.score || 0);
     if (!topicId || score < 1 || score > 5) {
       return Promise.reject(new Error('Choose a score between 1 and 5.'));
     }
-    const existing = topicScores.find(item => Number(item.topic_id) === topicId);
-    if (existing) {
-      existing.score = score;
-      existing.note = body.note || '';
-      existing.updated_at = new Date().toISOString();
-    } else {
-      topicScores.push({topic_id: topicId, score, note: body.note || '', updated_at: new Date().toISOString()});
+    const targetTopic = storedTopics.find(t => t.id === topicId);
+    if (!targetTopic || (currentUser.role === 'supervisor' && Number(targetTopic.supervisor_id) !== Number(currentUser.id))) {
+      return Promise.reject(new Error('Topic not assigned to you'));
     }
-    return Promise.resolve({ok: true});
+    const idx = storedScores.findIndex(item => Number(item.topic_id) === topicId);
+    const scoreRecord = {
+      topic_id: topicId,
+      score,
+      note: body.note || '',
+      updated_at: new Date().toISOString()
+    };
+    if (idx !== -1) {
+      storedScores[idx] = scoreRecord;
+    } else {
+      storedScores.push(scoreRecord);
+    }
+    saveStoredScores(storedScores);
+    syncFromLocalStorage();
+    return Promise.resolve({ ok: true });
   }
+
   if (action === 'topics') {
-    if (method === 'GET') return Promise.resolve(topics);
+    if (method === 'GET') {
+      return Promise.resolve(topics);
+    }
+    const title = String(body.title || '').trim();
+    const area = String(body.area || 'General').trim();
+    if (title.length < 8) {
+      return Promise.reject(new Error('Title must be at least 8 characters'));
+    }
+    // Similarity duplicate warning check
+    const words = title.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+    const terms = words.split(' ').filter(w => w.length > 4);
+    const isDuplicate = terms.length > 0 && storedTopics.some(t => {
+      const tTitle = t.title.toLowerCase();
+      return terms.some(term => tTitle.includes(term));
+    });
+    if (isDuplicate) {
+      return Promise.reject(new Error('Possible duplicate'));
+    }
+
+    const supervisorId = currentUser.role === 'supervisor' ? currentUser.id : Number(body.supervisor_id || 0);
+    if (!storedUsers.some(u => u.id === supervisorId && u.role === 'supervisor')) {
+      return Promise.reject(new Error('Select a valid supervisor'));
+    }
+
+    const nextTopicId = Math.max(0, ...storedTopics.map(t => t.id)) + 1;
     const newTopic = {
-      id: topics.length + 1,
-      title: body.title || 'New Topic',
-      area: body.area || 'General',
-      supervisor_id: Number(body.supervisor_id || 2),
-      supervisor: supervisors.find(s => s.id === Number(body.supervisor_id))?.name || 'Dr. Pius Utana',
+      id: nextTopicId,
+      title,
+      area,
+      supervisor_id: supervisorId,
       status: 'available',
       created_at: new Date().toISOString().slice(0, 10)
     };
-    topics.unshift(newTopic);
-    dashboardStats.available += 1;
-    return Promise.resolve({id: newTopic.id, message: 'Topic created'});
+    storedTopics.unshift(newTopic);
+    saveStoredTopics(storedTopics);
+    syncFromLocalStorage();
+    return Promise.resolve({ id: newTopic.id, message: 'Topic created' });
   }
+
   if (action === 'requests') {
-    if (method === 'GET') return Promise.resolve(requests);
+    if (method === 'GET') {
+      let filtered = [...storedRequests];
+      if (currentUser?.role === 'student') {
+        filtered = filtered.filter(r => r.student_id === currentUser.id);
+      } else if (currentUser?.role === 'supervisor') {
+        filtered = filtered.filter(r => String(r.area).toLowerCase() === String(currentUser.area || '').toLowerCase());
+      }
+      return Promise.resolve(filtered);
+    }
+
+    // POST request
+    const title = String(body.title || '').trim();
+    const area = String(body.area || 'General').trim();
+    const mode = body.mode === 'draft' ? 'draft' : 'pending';
+    if (title.length < 8) {
+      return Promise.reject(new Error('Title must be at least 8 characters'));
+    }
+    if (mode === 'pending' && storedRequests.some(r => r.student_id === currentUser.id && r.status === 'pending')) {
+      return Promise.reject(new Error('You already have a pending request'));
+    }
+
+    const nextRequestId = Math.max(0, ...storedRequests.map(r => r.id)) + 1;
     const newRequest = {
-      id: requests.length + 1,
-      student: body.student || 'Demo Student',
-      student_id: 5,
-      title: body.title || 'New Proposal',
-      area: body.area || 'General',
-      status: body.mode === 'draft' ? 'draft' : 'pending',
+      id: nextRequestId,
+      student_id: currentUser.id,
+      student: currentUser.name,
+      title,
+      area,
+      status: mode,
       created_at: new Date().toISOString().slice(0, 10)
     };
-    requests.unshift(newRequest);
-    if (newRequest.status === 'pending') dashboardStats.pending += 1;
-    return Promise.resolve({id: newRequest.id, status: newRequest.status});
+    storedRequests.unshift(newRequest);
+    saveStoredRequests(storedRequests);
+    syncFromLocalStorage();
+    return Promise.resolve({ id: newRequest.id, status: newRequest.status });
   }
+
   if (action === 'review-request' && method === 'POST') {
-    const request = requests.find(r => r.id === Number(body.id));
-    if (request && request.status === 'pending' && ['approved', 'rejected'].includes(body.decision)) {
-      request.status = body.decision;
-      dashboardStats.pending = Math.max(0, dashboardStats.pending - 1);
-      return Promise.resolve({ok: true});
+    const requestId = Number(body.id || 0);
+    const decision = body.decision;
+    if (requestId < 1 || !['approved', 'rejected'].includes(decision)) {
+      return Promise.reject(new Error('Invalid request review'));
     }
-    return Promise.reject(new Error('Invalid request review'));
+    const idx = storedRequests.findIndex(r => r.id === requestId && r.status === 'pending');
+    if (idx === -1) {
+      return Promise.reject(new Error('Request is unavailable'));
+    }
+    const request = storedRequests[idx];
+    // Check permission
+    const canUserReview = currentUser.role === 'admin' || (currentUser.role === 'supervisor' && String(currentUser.area || '').toLowerCase() === String(request.area || '').toLowerCase());
+    if (!canUserReview) {
+      return Promise.reject(new Error('Forbidden'));
+    }
+    request.status = decision;
+    saveStoredRequests(storedRequests);
+    syncFromLocalStorage();
+    return Promise.resolve({ ok: true });
   }
+
+  if (action === 'allocate' && method === 'POST') {
+    const studentId = Number(body.student_id || 0);
+    const topicId = Number(body.topic_id || 0);
+    const student = storedUsers.find(u => u.id === studentId && u.role === 'student');
+    if (!student) {
+      return Promise.reject(new Error('Select a valid student'));
+    }
+    const topic = storedTopics.find(t => t.id === topicId);
+    if (!topic || topic.status !== 'available') {
+      return Promise.reject(new Error('Topic is unavailable'));
+    }
+    if (currentUser.role === 'supervisor' && Number(topic.supervisor_id) !== Number(currentUser.id)) {
+      return Promise.reject(new Error('Forbidden'));
+    }
+    const supervisorObj = storedUsers.find(u => u.id === Number(topic.supervisor_id) && u.role === 'supervisor');
+    const currentLoad = storedAllocations.filter(a => Number(a.supervisor_id) === Number(topic.supervisor_id)).length;
+    if (!supervisorObj || currentLoad >= (supervisorObj.capacity ?? 6)) {
+      return Promise.reject(new Error('Supervisor is at capacity'));
+    }
+
+    // Register allocation
+    const nextAllocId = Math.max(0, ...storedAllocations.map(a => a.id)) + 1;
+    storedAllocations.push({
+      id: nextAllocId,
+      student_id: studentId,
+      topic_id: topicId,
+      supervisor_id: topic.supervisor_id,
+      allocated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+    });
+    topic.status = 'allocated';
+    saveStoredAllocations(storedAllocations);
+    saveStoredTopics(storedTopics);
+    syncFromLocalStorage();
+    return Promise.resolve({ ok: true });
+  }
+
   return Promise.reject(new Error('Static demo action not supported'));
 }
 
@@ -549,6 +818,20 @@ function setTopicControls() {
   document.querySelectorAll('[data-view="requests"]').forEach(link => { if (link) link.hidden = !isLoggedIn; });
   document.querySelectorAll('[data-view="allocations"]').forEach(link => { if (link) link.hidden = !isLoggedIn; });
   document.querySelectorAll('[data-view="reports"]').forEach(link => { if (link) link.hidden = !isLoggedIn; });
+
+  const isStudent = currentUser && currentUser.role === 'student';
+  const proposalFormPanel = document.querySelector('#proposal-form-panel');
+  if (proposalFormPanel) {
+    if (isStudent) {
+      proposalFormPanel.classList.remove('hidden');
+      const studentInput = document.querySelector('#proposal-student');
+      if (studentInput) {
+        studentInput.value = currentUser.name;
+      }
+    } else {
+      proposalFormPanel.classList.add('hidden');
+    }
+  }
 }
 document.querySelectorAll('[data-view]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.view').forEach(view => view.classList.remove('active')); const targetView = document.querySelector('#' + link.dataset.view); if (targetView) targetView.classList.add('active'); const pageTitle = document.querySelector('#page-title'); if (pageTitle) pageTitle.textContent = link.textContent.trim().replace(/\d/g, ''); window.scrollTo(0, 0); const sidebar = document.querySelector('.sidebar'); if (sidebar) sidebar.classList.remove('open'); }));
 document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => document.querySelector(`[data-view="${button.dataset.go}"]`)?.click()));
@@ -605,7 +888,50 @@ function renderSupervisorDetails(supervisor) {
   document.querySelectorAll('.supervisor-card').forEach(card => card.classList.toggle('active', Number(card.dataset.supervisorId) === Number(supervisor.id)));
 }
 document.querySelector('#supervisor-grid')?.addEventListener('click', event => { const card = event.target.closest('.supervisor-card'); if (!card) return; const supervisor = supervisors.find(s => Number(s.id) === Number(card.dataset.supervisorId)); if (!supervisor) return; renderSupervisorDetails(supervisor); toast(`${supervisor.name} — ${supervisor.area}`); });
-document.querySelector('#supervisor-projects')?.addEventListener('click', event => {
+document.querySelector('#close-allocate-modal')?.addEventListener('click', () => {
+  document.querySelector('#allocate-modal')?.classList.remove('open');
+});
+document.querySelector('#allocate-modal')?.addEventListener('click', event => {
+  if (event.target.id === 'allocate-modal') {
+    event.currentTarget.classList.remove('open');
+  }
+});
+
+document.querySelector('#allocate-form')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  const topicId = Number(document.querySelector('#allocate-topic-id')?.value || 0);
+  const studentId = Number(document.querySelector('#allocate-student-select')?.value || 0);
+  if (!topicId || !studentId) return toast('Please select a student.');
+
+  try {
+    await api('allocate', {
+      method: 'POST',
+      body: JSON.stringify({ student_id: studentId, topic_id: topicId })
+    });
+
+    // Close modal
+    document.querySelector('#allocate-modal')?.classList.remove('open');
+    toast('Project allocated successfully.');
+
+    // Reload and re-render
+    syncFromLocalStorage();
+    render();
+
+    // Re-render supervisor details if a supervisor is selected
+    const activeCard = document.querySelector('.supervisor-card.active');
+    if (activeCard) {
+      const activeSupId = Number(activeCard.dataset.supervisorId);
+      const activeSup = supervisors.find(s => s.id === activeSupId);
+      if (activeSup) {
+        renderSupervisorDetails(activeSup);
+      }
+    }
+  } catch (error) {
+    toast(error.message);
+  }
+});
+
+document.querySelector('#supervisor-projects')?.addEventListener('click', async event => {
   const btn = event.target.closest('.allocate-btn');
   if (!btn) return;
   const topicId = Number(btn.dataset.topicId);
@@ -613,19 +939,44 @@ document.querySelector('#supervisor-projects')?.addEventListener('click', event 
   const topic = topics.find(t => Number(t.id) === topicId);
   if (!topic) return toast('Topic not found');
   const supervisor = supervisors.find(s => Number(s.id) === Number(topic.supervisor_id));
+
   if (action === 'allocate') {
-    topic.status = 'allocated';
-    dashboardStats.allocated = (dashboardStats.allocated || 0) + 1;
-    dashboardStats.available = Math.max(0, (dashboardStats.available || 0) - 1);
-    toast('Allocated project.');
+    // Show student selection modal
+    const storedUsers = getStoredUsers();
+    const storedAllocations = getStoredAllocations();
+    const allocatedStudentIds = storedAllocations.map(a => Number(a.student_id));
+    const unallocatedStudents = storedUsers.filter(u => u.role === 'student' && !allocatedStudentIds.includes(Number(u.id)));
+
+    if (unallocatedStudents.length === 0) {
+      return toast('All students have already been allocated a topic.');
+    }
+
+    // Populate and open modal
+    document.querySelector('#allocate-topic-title').textContent = topic.title;
+    document.querySelector('#allocate-topic-id').value = topic.id;
+
+    const select = document.querySelector('#allocate-student-select');
+    select.innerHTML = unallocatedStudents.map(student => `<option value="${student.id}">${escapeHtml(student.name)} (${escapeHtml(student.email)})</option>`).join('');
+
+    document.querySelector('#allocate-modal')?.classList.add('open');
   } else {
-    topic.status = 'available';
-    dashboardStats.allocated = Math.max(0, (dashboardStats.allocated || 0) - 1);
-    dashboardStats.available = (dashboardStats.available || 0) + 1;
+    // Unallocate
+    const storedAllocations = getStoredAllocations();
+    const nextAllocations = storedAllocations.filter(a => Number(a.topic_id) !== topicId);
+    saveStoredAllocations(nextAllocations);
+
+    const storedTopics = getStoredTopics();
+    const targetTopic = storedTopics.find(t => Number(t.id) === topicId);
+    if (targetTopic) {
+      targetTopic.status = 'available';
+      saveStoredTopics(storedTopics);
+    }
+
     toast('Project unallocated.');
+    syncFromLocalStorage();
+    render();
+    if (supervisor) renderSupervisorDetails(supervisor);
   }
-  render();
-  if (supervisor) renderSupervisorDetails(supervisor);
 });
 
 document.querySelector('#selected-supervisor-panel')?.addEventListener('click', event => {
@@ -638,23 +989,37 @@ document.querySelector('#selected-supervisor-panel')?.addEventListener('click', 
 });
 
 function removeSupervisor(supervisorId) {
-  const supervisor = supervisors.find(s => Number(s.id) === supervisorId);
-  if (!supervisor) return toast('Supervisor not found.');
-  const assignedTopics = topics.filter(topic => Number(topic.supervisor_id) === supervisorId);
-  assignedTopics.forEach(topic => {
-    if (topic.status === 'allocated') {
-      dashboardStats.allocated = Math.max(0, (dashboardStats.allocated || 0) - 1);
-      dashboardStats.available = (dashboardStats.available || 0) + 1;
+  const storedUsers = getStoredUsers();
+  const supervisorUserObj = storedUsers.find(u => u.id === supervisorId && u.role === 'supervisor');
+  if (!supervisorUserObj) return toast('Supervisor not found.');
+
+  // 1. Remove the supervisor user
+  const nextUsers = storedUsers.filter(u => u.id !== supervisorId);
+  saveStoredUsers(nextUsers);
+
+  // 2. Unassign/clear supervisor on their topics in stored topics
+  const storedTopics = getStoredTopics();
+  storedTopics.forEach(topic => {
+    if (Number(topic.supervisor_id) === supervisorId) {
+      topic.supervisor_id = null;
+      if (topic.status === 'allocated') {
+        topic.status = 'available';
+      }
     }
-    topic.supervisor_id = null;
-    topic.supervisor = 'Unassigned';
-    if (topic.status === 'allocated') topic.status = 'available';
   });
-  supervisors = supervisors.filter(s => Number(s.id) !== supervisorId);
-  populateSupervisors();
+  saveStoredTopics(storedTopics);
+
+  // 3. Remove allocations associated with this supervisor
+  const storedAllocations = getStoredAllocations();
+  const nextAllocations = storedAllocations.filter(a => Number(a.supervisor_id) !== supervisorId);
+  saveStoredAllocations(nextAllocations);
+
+  toast(`${supervisorUserObj.name} removed and their topics were unassigned.`);
+
+  // 4. Sync and re-render
+  syncFromLocalStorage();
   render();
   document.querySelector('#selected-supervisor-panel')?.classList.add('hidden');
-  toast(`${supervisor.name} removed and their topics were unassigned.`);
 }
 function showReportView(view = 'summary') {
   currentReportView = view;
@@ -717,26 +1082,7 @@ async function submitLogin(email, password) {
 }
 
 async function boot() {
-  readStoredScores();
-  if (isStaticFile) {
-    enableStaticDemoMode();
-    return;
-  }
-  try {
-    const session = await api('me');
-    currentUser = session.user;
-    csrfToken = session.csrf;
-    updateAuthUi();
-    const loginWall = document.querySelector('#login-wall');
-    if (!currentUser) {
-      loginWall?.classList.remove('hidden');
-      return;
-    }
-    loginWall?.classList.add('hidden');
-    await loadData();
-  } catch {
-    enableStaticDemoMode();
-  }
+  enableStaticDemoMode();
 }
 document.querySelector('#show-signup')?.addEventListener('click', event => { event.preventDefault(); showAuthMode('signup'); });
 document.querySelector('#show-login')?.addEventListener('click', event => { event.preventDefault(); showAuthMode('login'); });

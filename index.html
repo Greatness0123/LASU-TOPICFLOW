@@ -47,6 +47,23 @@
     </main>
   </div>
   <div class="modal-backdrop" id="modal"><form class="modal" id="topic-form"><button type="button" class="close-modal" aria-label="Close">×</button><p class="section-label">TOPIC MANAGEMENT</p><h2>Add a project topic</h2><p>Topics are checked for similarity before publication.</p><label>Topic title<input required id="new-title" placeholder="e.g. Smart attendance system" /></label><label>Research area<select id="new-area"><option>Artificial Intelligence</option><option>Web Development</option><option>Data Science</option><option>Cybersecurity</option></select></label><label>Supervisor<select id="new-supervisor"><option>Dr. Adaeze Okafor</option><option>Prof. Ibrahim Musa</option><option>Dr. Chinedu Eze</option></select></label><button class="new-topic" type="submit">Add topic</button></form></div>
+
+  <div class="modal-backdrop" id="allocate-modal">
+    <form class="modal" id="allocate-form">
+      <button type="button" class="close-modal" id="close-allocate-modal" aria-label="Close">×</button>
+      <p class="section-label">ALLOCATION MANAGEMENT</p>
+      <h2>Allocate project topic</h2>
+      <p id="allocate-topic-title" style="font-weight: bold; margin-bottom: 12px; color: var(--ink); font-size: 14px;"></p>
+      <input type="hidden" id="allocate-topic-id" />
+      <label>Select Student
+        <select id="allocate-student-select" required>
+          <!-- Options populated dynamically -->
+        </select>
+      </label>
+      <button class="new-topic" type="submit" style="width: 100%; margin-top: 12px;">Confirm Allocation</button>
+    </form>
+  </div>
+
   <div class="toast" id="toast"></div>
   <div class="login-wall hidden" id="login-wall">
     <div class="login-card">
